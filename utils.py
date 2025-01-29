@@ -21,6 +21,7 @@ def get_HV_folder_name(hv_numbers, hve_path=Path(HAUPTVERSUCHE_PATH)):
         return folder_names
 
 def read_timeseries_data(hv_number):
+    '''Reads and merges all timeseries datasets (from one single HV) necessary for the deviation pipeline'''
     
     folder_name = get_HV_folder_name(hv_number)[0]
     try:
@@ -31,13 +32,11 @@ def read_timeseries_data(hv_number):
         tool = pd.read_parquet(Path(r'D:\HiWi 2.0\Daten\Hauptversuche', folder_name, r'Daten\Zeitreihendaten\tool.parquet')).rename(columns={'Number': 'ToolID', 'Diameter': 'Tool_Diameter', 'Length': 'Tool_Length'}) 
     except:
         print(f'HV{hv_number} failed: Time series datasets not available')
-        # continue
         return pd.DataFrame()
     try:
         sim = pd.read_csv(Path(r'D:\HiWi 2.0\Daten\sim_voxout', f'vox_sim_HV{hv_number}.csv'))
     except:
         print(f'HV{hv_number} failed: Simulation dataset not available')
-        # continue
         return pd.DataFrame()
 
     # We get the torque feedback from drive, the operation from prof, the spindle speed from cnc, and the tool ID from tool
@@ -46,8 +45,7 @@ def read_timeseries_data(hv_number):
     df = pd.merge_asof(df, tool[['Timestamp', 'ToolID', 'Tool_Diameter', 'Tool_Length']], on='Timestamp', direction='backward')
     df = pd.merge_asof(df, sim[['Timestamp', 'Removed_Volume V']], on='Timestamp', direction='backward')
 
-    # Convert the spindle speed column to RPM
-    # df['S1Actrev_rpm'] = (df['S1Actrev']/(1e3 * 360))*60    
+    # Convert the torque column to N.m and the spindle speed column to RPM
     df["S1ActTrq"] = df["S1ActTrq"] / 1000 * 3.8
     df["S1Actrev"] = df["S1Actrev"] * (0.001/360) * 60
 
@@ -84,7 +82,7 @@ def get_operation_interval(df, operation, spindle_speed_column='S1Actrev', min_s
     Searches the df given and returns the period where the operation is correct and the spindle speed is constant and greater than min_speed
     '''
 
-    # Finding the interval where the spindle speed is positive (greater than min_speed) and the operation is correct
+    # Finding the interval in which the spindle speed is positive (greater than min_speed) and the operation is correct
     mask = (df[spindle_speed_column] > min_speed) & (df['Operation'] == operation)
     spindle_speed_intervals = find_all_intervals(mask)
     
