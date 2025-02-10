@@ -14,7 +14,7 @@ def get_deflection(cutting_force, tool_length, elasticity, moment=None, diameter
     '''
 
     if moment == None:
-        # If the moment is not give, calculate it, approximating the spindle as a solid circular cylinder
+        # If the moment is not given, calculate it, approximating the spindle as a solid circular cylinder
         moment = (np.pi * (diameter ** 4)) / 64
 
     return (cutting_force * (tool_length ** 3)) / (3 * elasticity * moment)

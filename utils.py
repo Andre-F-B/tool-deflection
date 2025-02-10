@@ -61,19 +61,13 @@ def lookup_outputdata(outputdata, hv_number, bezeichnung, column):
 def find_most_common_tool(df, operation):
     '''
     For a given operation, counts the frequency of each tool ID, returns the most frequent tool ID, as well as the number of different tool IDs
-    Parameters:
+    Args:
         df (pd.DataFrame): dataframe with the oeration names and tool ids across time
         operation (str): name of the operation
     '''
     
     value_counts = df.loc[df['Operation'] == operation, 'ToolID'].value_counts()
     n_tools = len(value_counts)
-    # if n_tools <= 0:
-        # print(df['ToolID'].head())
-        # print(df.loc[df['Operation'] == operation].head())
-        # print(df.loc[df['Operation'] == operation, 'ToolID'])
-        # print(value_counts)
-        # print(f'Operation: {operation}')
     most_common_tool_id = value_counts.index[value_counts.argmax()]
     return most_common_tool_id, n_tools
 

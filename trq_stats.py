@@ -35,10 +35,10 @@ def get_trq_stats(hv_numbers, bezeichnungen, outputdata=None):
             continue
         
         try:
-            # My preprocessing
+            # My preprocessing:
             df = utils.read_timeseries_data(hv_number)
 
-            # Erkut's preprocessing
+            # Erkut's preprocessing:
             # folder_name = utils.get_HV_folder_name(hv_number)[0]
             # folder_path = Path(r'D:\HiWi 2.0\Daten\Hauptversuche', folder_name, r'Daten\Zeitreihendaten')
             # df, _ = read_data(folder_path)

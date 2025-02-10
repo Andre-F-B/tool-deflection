@@ -8,7 +8,7 @@ import config
 def get_friction_trq(spindle_speed, model=None, return_std=False, model_path=config.FRICTION_MODEL_PATH):
     '''
     Given an array of spindle speeds, return an array of the corresponding friction torque
-    Parameters:
+    Args:
         spindle_speed (pd.Series): array of spindle speeds in the original unit (0,001 degrees/second)
     '''
 
