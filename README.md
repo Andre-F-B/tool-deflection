@@ -9,3 +9,7 @@ File used for testing of preprocessing methods and analysis of results. Some of 
 **main.py**
 
 Preprocess the data and builds the relevant datasets for deviation analysis by running trq_stats.build_df_trq_dev().
+
+**Deviation Analysis Pipeline.pptx**
+
+Summary explanation of the preprocessing steps taken to build the datasets.
